@@ -5,6 +5,11 @@ const pool = require('./db');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json());
+
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
 app.get('/', (req, res) => {
   res.send('Hello! My backend is working.');
 });
@@ -21,5 +26,3 @@ app.get('/db-test', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-

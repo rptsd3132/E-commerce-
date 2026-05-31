@@ -1,0 +1,22 @@
+# Dependencies — rebuildable with npm install
+node_modules/
+
+# Environment secrets — never share
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build output (for frontend later)
+dist/
+build/
+
+# Editor / OS junk files
+.vscode/
+.DS_Store
+
+# Optional: keep an example env without secrets
+# (we keep .env.example, ignore the real .env)
+

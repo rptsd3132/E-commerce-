@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Cart from './Cart';
 import Complaints from './Complaints';
 import { Headphones } from 'lucide-react';
+import ProductDetail from './ProductDetail';
+
 
 import ProductList from './ProductList';
 import Login from './Login';
@@ -11,6 +13,7 @@ function App() {
   const [view, setView] = useState('home');
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -23,6 +26,11 @@ function App() {
     setUser(loggedInUser);
     setView('home');
   }
+
+  function openProduct(id) {
+  setSelectedProductId(id);
+  setView('product');
+}
 
   function handleLogout() {
     localStorage.removeItem('token');
@@ -158,11 +166,11 @@ function App() {
         </div>
       </div>
       <div style={{ padding: '0 clamp(16px, 5vw, 40px) 40px' }}>
-        {view === 'home' && <ProductList addToCart={addToCart} />}
+        {view === 'home' && <ProductList addToCart={addToCart} openProduct={openProduct} />}
         {view === 'complaints' && <Complaints user={user} />}
         {view === 'login' && <Login onLoginSuccess={handleLoginSuccess} goToSignup={() => setView('signup')} />}
         {view === 'signup' && <Signup goToLogin={() => setView('login')} />}
-          {view === 'cart' && (
+        {view === 'cart' && (
           <Cart
             cart={cart}
             changeQuantity={changeQuantity}
@@ -171,6 +179,14 @@ function App() {
             user={user}
           />
         )}
+        {view === 'product' && (
+          <ProductDetail
+            productId={selectedProductId}
+            user={user}
+            goBack={() => setView('home')}
+          />
+        )}
+        
       </div>
     </div>
   );

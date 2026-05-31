@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function ProductList({ addToCart }) {
+function ProductList({ addToCart, openProduct }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -59,7 +59,12 @@ function ProductList({ addToCart }) {
     <div style={gridStyle}>
       {products.map((product) => (
         <div key={product.id} style={cardStyle}>
-          <h2 style={nameStyle}>{product.name}</h2>
+          <h2
+            style={{ ...nameStyle, cursor: 'pointer' }}
+            onClick={() => openProduct(product.id)}
+          >
+            {product.name}
+          </h2>
           <p style={descStyle}>{product.description}</p>
           <p style={priceStyle}>${product.price}</p>
           <p style={stockStyle}>{product.stock} in stock</p>

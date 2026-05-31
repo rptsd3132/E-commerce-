@@ -20,6 +20,9 @@ app.use('/api/orders', orderRoutes);
 const complaintRoutes = require('./routes/complaints');
 app.use('/api/complaints', complaintRoutes);
 
+const reviewRoutes = require('./routes/reviews');
+app.use('/api/reviews', reviewRoutes);
+
 
 
 const productRoutes = require('./routes/products');

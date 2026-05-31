@@ -14,6 +14,9 @@ app.use(express.json());
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
+const orderRoutes = require('./routes/orders');
+app.use('/api/orders', orderRoutes);
+
 const productRoutes = require('./routes/products');
 app.use('/api/products', productRoutes);
 

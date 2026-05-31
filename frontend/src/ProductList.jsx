@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function ProductList() {
+function ProductList({ addToCart }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,26 +19,40 @@ function ProductList() {
 
   const gridStyle = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-    gap: '24px',
-    maxWidth: '1100px',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+    gap: 'clamp(16px, 3vw, 24px)',
+    maxWidth: '1200px',
     margin: '0 auto',
+    width: '100%',
   };
 
   const cardStyle = {
     background: 'white',
-    borderRadius: '16px',
+    borderRadius: '12px',
     padding: '20px',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
+    boxShadow: '0 4px 14px rgba(0,0,0,0.08)',
+    border: '1px solid #ece5d3',
   };
 
-  const nameStyle = { fontSize: '20px', fontWeight: 'bold', color: '#1e1b4b', margin: '0 0 8px' };
-  const descStyle = { color: '#555', fontSize: '14px', minHeight: '40px' };
-  const priceStyle = { fontSize: '22px', fontWeight: 'bold', color: '#6c2bd9', margin: '12px 0 4px' };
-  const stockStyle = { fontSize: '13px', color: '#16a34a' };
+  const nameStyle = { fontSize: '20px', fontWeight: 'bold', color: '#14532d', margin: '0 0 8px' };
+  const descStyle = { color: '#7a7a6d', fontSize: '14px', minHeight: '40px' };
+  const priceStyle = { fontSize: '24px', fontWeight: 'bold', color: '#f0932b', margin: '12px 0 4px' };
+  const stockStyle = { fontSize: '13px', color: '#14532d' };
+  const buttonStyle = {
+    width: '100%',
+    padding: '10px',
+    marginTop: '12px',
+    borderRadius: '24px',
+    border: 'none',
+    background: '#f0932b',
+    color: 'white',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    fontSize: '14px',
+  };
 
   if (loading) {
-    return <p style={{ color: 'white', textAlign: 'center' }}>Loading products...</p>;
+    return <p style={{ color: '#14532d', textAlign: 'center' }}>Loading products...</p>;
   }
 
   return (
@@ -49,6 +63,9 @@ function ProductList() {
           <p style={descStyle}>{product.description}</p>
           <p style={priceStyle}>${product.price}</p>
           <p style={stockStyle}>{product.stock} in stock</p>
+          <button style={buttonStyle} onClick={() => addToCart(product)}>
+            Add to Cart
+          </button>
         </div>
       ))}
     </div>
@@ -56,5 +73,3 @@ function ProductList() {
 }
 
 export default ProductList;
-
-

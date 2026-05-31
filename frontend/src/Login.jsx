@@ -42,7 +42,7 @@ function Login({ onLoginSuccess, goToSignup }) {
     fontWeight: 'bold', cursor: 'pointer',
   };
   const titleStyle = { textAlign: 'center', color: '#1e1b4b', marginBottom: '16px' };
-  const linkStyle = { color: '#6c2bd9', cursor: 'pointer', textAlign: 'center', marginTop: '14px' };
+  const linkStyle = { color: '#270bb6', cursor: 'pointer', textAlign: 'center', marginTop: '14px' };
 
   return (
     <div style={boxStyle}>

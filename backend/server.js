@@ -10,6 +10,9 @@ app.use(express.json());
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
+const productRoutes = require('./routes/products');
+app.use('/api/products', productRoutes);
+
 app.get('/', (req, res) => {
   res.send('Hello! My backend is working.');
 });

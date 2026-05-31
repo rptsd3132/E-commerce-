@@ -17,6 +17,11 @@ app.use('/api/auth', authRoutes);
 const orderRoutes = require('./routes/orders');
 app.use('/api/orders', orderRoutes);
 
+const complaintRoutes = require('./routes/complaints');
+app.use('/api/complaints', complaintRoutes);
+
+
+
 const productRoutes = require('./routes/products');
 app.use('/api/products', productRoutes);
 

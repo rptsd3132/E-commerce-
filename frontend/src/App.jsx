@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Cart from './Cart';
+import Complaints from './Complaints';
+import { Headphones } from 'lucide-react';
 
 import ProductList from './ProductList';
 import Login from './Login';
@@ -109,6 +111,17 @@ function App() {
     marginLeft: '10px',
   };
 
+  const iconButton = {
+  background: '#f0932b',
+    color: 'white',
+    border: 'none',
+    padding: '10px 20px',
+    borderRadius: '24px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: 'bold',
+  };
+
   
 
   return (
@@ -116,17 +129,28 @@ function App() {
       <div style={navStyle}>
         <h1 style={titleStyle} onClick={() => setView('home')}>🛒 My Mini Amazon</h1>
         <div>
+                 <button
+                  style={{ ...navButton, display: 'flex', gap: '6px' }}
+                   onClick={() => setView('complaints')} >
+          
+                   <Headphones size={18} color="white" />
+                     Help Center
+                   </button>
+              </div>
+        <div>
           {user ? (
             <>
               
               <span style={{ color: '#e4cf0f', marginRight: '12px', fontWeight: 'bold' }}>Hi, {user.name}</span>
               <button style={navButton} onClick={handleLogout}>Log Out</button>
               <button style={naviButton} onClick={() => setView('cart')}>
-          🛒cart ({cart.reduce((sum, item) => sum + item.quantity, 0)})
-        </button>
+                    🛒cart ({cart.reduce((sum, item) => sum + item.quantity, 0)})
+               </button>
+              
             </>
           ) : (
             <>
+             
               <button style={navButton} onClick={() => setView('login')}>Log In</button>
               <button style={navButton} onClick={() => setView('signup')}>Sign Up</button>
             </>
@@ -135,6 +159,7 @@ function App() {
       </div>
       <div style={{ padding: '0 clamp(16px, 5vw, 40px) 40px' }}>
         {view === 'home' && <ProductList addToCart={addToCart} />}
+        {view === 'complaints' && <Complaints user={user} />}
         {view === 'login' && <Login onLoginSuccess={handleLoginSuccess} goToSignup={() => setView('signup')} />}
         {view === 'signup' && <Signup goToLogin={() => setView('login')} />}
           {view === 'cart' && (

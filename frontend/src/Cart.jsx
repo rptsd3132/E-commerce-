@@ -1,4 +1,9 @@
+import { useState } from 'react';
+
 function Cart({ cart, changeQuantity, removeFromCart, clearCart, user }) {
+  const [message, setMessage] = useState('');
+  const [placing, setPlacing] = useState(false);
+
   const total = cart.reduce(
     (sum, item) => sum + Number(item.price) * item.quantity,
     0
@@ -23,20 +28,48 @@ function Cart({ cart, changeQuantity, removeFromCart, clearCart, user }) {
     fontSize: '16px', cursor: 'pointer',
   };
 
+  async function handleCheckout() {
+    if (!user) {
+      setMessage('Please log in to checkout.');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    setPlacing(true);
+    setMessage('');
+
+    try {
+      const res = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ items: cart }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.error || 'Checkout failed.');
+        setPlacing(false);
+        return;
+      }
+
+      setMessage(`✅ Order placed! Order #${data.orderId}, total $${Number(data.total).toFixed(2)}`);
+      clearCart();
+    } catch (err) {
+      setMessage('Network error. Is the backend running?');
+    }
+    setPlacing(false);
+  }
+
   if (cart.length === 0) {
     return (
       <div style={boxStyle}>
         <h2 style={{ color: '#14532d', textAlign: 'center' }}>Your cart is empty 🛒</h2>
+        {message && <p style={{ textAlign: 'center', color: '#14532d', marginTop: '12px' }}>{message}</p>}
       </div>
     );
-  }
-
-  function handleCheckout() {
-    if (!user) {
-      alert('Please log in to checkout.');
-      return;
-    }
-    alert('Checkout coming next — backend not wired yet!');
   }
 
   return (
@@ -64,7 +97,10 @@ function Cart({ cart, changeQuantity, removeFromCart, clearCart, user }) {
       <h3 style={{ color: '#f0932b', textAlign: 'right', marginTop: '16px' }}>
         Total: ${total.toFixed(2)}
       </h3>
-      <button style={checkoutBtn} onClick={handleCheckout}>Checkout</button>
+      <button style={checkoutBtn} onClick={handleCheckout} disabled={placing}>
+        {placing ? 'Placing order...' : 'Checkout'}
+      </button>
+      {message && <p style={{ textAlign: 'center', marginTop: '12px', color: '#14532d' }}>{message}</p>}
     </div>
   );
 }

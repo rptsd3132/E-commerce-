@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 function ProductList({ addToCart, openProduct }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -16,6 +17,32 @@ function ProductList({ addToCart, openProduct }) {
         setLoading(false);
       });
   }, []);
+
+  const filteredProducts = products.filter((product) => {
+    const text = search.toLowerCase();
+    return (
+      product.name.toLowerCase().includes(text) ||
+      (product.description && product.description.toLowerCase().includes(text))
+    );
+  });
+
+  const searchWrapStyle = {
+    maxWidth: '600px',
+    margin: '0 auto 30px',
+    display: 'flex',
+    justifyContent: 'center',
+  };
+ const searchInputStyle = {
+    width: '100%',
+    padding: '14px 20px',
+    borderRadius: '30px',
+    border: '2px solid #14532d',
+    fontSize: '16px',
+    outline: 'none',
+    background: 'white',
+    color: '#14532d',
+    caretColor: '#14532d',
+  };
 
   const gridStyle = {
     display: 'grid',
@@ -56,23 +83,40 @@ function ProductList({ addToCart, openProduct }) {
   }
 
   return (
-    <div style={gridStyle}>
-      {products.map((product) => (
-        <div key={product.id} style={cardStyle}>
-          <h2
-            style={{ ...nameStyle, cursor: 'pointer' }}
-            onClick={() => openProduct(product.id)}
-          >
-            {product.name}
-          </h2>
-          <p style={descStyle}>{product.description}</p>
-          <p style={priceStyle}>${product.price}</p>
-          <p style={stockStyle}>{product.stock} in stock</p>
-          <button style={buttonStyle} onClick={() => addToCart(product)}>
-            Add to Cart
-          </button>
+    <div>
+      <div style={searchWrapStyle}>
+        <input
+          style={searchInputStyle}
+          placeholder="🔍 Search products..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      {filteredProducts.length === 0 ? (
+        <p style={{ color: '#14532d', textAlign: 'center' }}>
+          No products found for "{search}"
+        </p>
+      ) : (
+        <div style={gridStyle}>
+          {filteredProducts.map((product) => (
+            <div key={product.id} style={cardStyle}>
+              <h2
+                style={{ ...nameStyle, cursor: 'pointer' }}
+                onClick={() => openProduct(product.id)}
+              >
+                {product.name}
+              </h2>
+              <p style={descStyle}>{product.description}</p>
+              <p style={priceStyle}>${product.price}</p>
+              <p style={stockStyle}>{product.stock} in stock</p>
+              <button style={buttonStyle} onClick={() => addToCart(product)}>
+                Add to Cart
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }
